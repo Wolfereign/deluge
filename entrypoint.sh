@@ -15,7 +15,7 @@ chown -R deluge:deluge /config
 chown -R deluge:deluge /torrents
 
 # Add supplied auth
-echo $DELUGED_USER:$DELUGED_PASS:10 >> /config/auth
+echo $DELUGE_USER:$DELUGE_PASS:10 >> /config/auth
 
 # Start Supervisord
 supervisord -c /etc/supervisord.conf
