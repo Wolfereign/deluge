@@ -3,11 +3,11 @@ LABEL maintainer="Wolfereign"
 
 # Update Packages and Install Needed Packages
 RUN apk add --update --no-cache \ 
-    wget \
-    deluge \
-    supervisor \
-    ca-certificates \
-    && rm -rf /var/cache/apk/*
+        wget \
+        supervisor \
+        ca-certificates &&\
+    apk add deluge --update-cache --repository http://nl.alpinelinux.org/alpine/edge/testing \
+    rm -rf /var/cache/apk/*
 
 # UID/GID
 ENV USER_ID=866 \
