@@ -25,12 +25,15 @@ deluged -c /config && deluge-console -c /config "config" && deluge-console -c /c
 
 # Edit Conf Files To Image/Container Environment
 sed -i 's#\("move_completed_path": \)\(.*\)#\1"/torrents/completed",#' /config/core.conf
+sed -i 's#\("daemon_port": \)\(.*\)#\158846#' /config/core.conf
 sed -i 's#\("torrentfiles_location": \)\(.*\)#\1"/torrents/torrent-files",#' /config/core.conf
 sed -i 's#\("allow_remote": \)\(.*\)#\1true,#' /config/core.conf
 sed -i 's#\("download_location": \)\(.*\)#\1"/torrents/inprogress",#' /config/core.conf
 sed -i 's#\("move_completed": \)\(.*\)#\1true,#' /config/core.conf
 sed -i 's#\("autoadd_enable": \)\(.*\)#\1true,#' /config/core.conf
 sed -i 's#\("autoadd_location": \)\(.*\)#\1"/torrents/autoadd",#' /config/core.conf
+
+sed -i 's#\("port": \)\(.*\)#\18112#' /config/web.conf
 
 fi
 

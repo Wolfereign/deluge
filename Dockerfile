@@ -5,8 +5,9 @@ LABEL maintainer="Wolfereign"
 RUN apk add --update --no-cache \ 
         wget \
         supervisor \
-	shadow \
-	py-pip \
+        shadow \
+        py-pip \
+        openvpn \
         ca-certificates &&\
     apk add deluge --update-cache --repository http://nl.alpinelinux.org/alpine/edge/testing &&\
     rm -rf /var/cache/apk/* &&\
