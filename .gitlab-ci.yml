@@ -1,0 +1,30 @@
+image: docker:stable
+services:
+- docker:dind
+
+stages:
+- build
+- release
+
+variables:
+  CONTAINER_REGISTRY: registry.gitlab.com/wolfereign/deluge-pia
+  CONTAINER_TEST_IMAGE: $CONTAINER_REGISTRY:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CONTAINER_REGISTRY:latest
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CONTAINER_REGISTRY
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t $CONTAINER_TEST_IMAGE .
+    - docker push $CONTAINER_TEST_IMAGE
+
+release-image:
+  stage: release
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - master
