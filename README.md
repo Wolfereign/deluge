@@ -1,2 +1,4 @@
 # deluge-pia
-Deluge Web Server w/ Private Internet Access VPN
+Deluge Web Server
+
+# Work In Progess
