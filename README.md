@@ -1,13 +1,9 @@
 # deluge-simple
-Deluge Daemon + Web Server
+Run the Deluge Torrent Server In A Simple and Reproducable Way!
 
-## Master Branch
-Docker Image That Runs The Deluge Daemon (w/ Console) + Web Server
-
-## Daemon Branch
-Docker Image That Runs Only The Deluge Daemon (w/ Console)
-
-## Web Branch
-Docker Image That Runs Only The Deluge Web Server
+## Branches/Tags
+- Master/Latest = Deluge Daemon (w/ Console) + Web Server
+- Daemon = Deluge Daemon (w/ Console)
+- Web = Deluge Web Server
 
 # Work In Progess
