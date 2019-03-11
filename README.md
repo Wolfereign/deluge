@@ -1,5 +1,5 @@
 # deluge-simple
-Run the Deluge Torrent Server In A Simple and Reproducable Way!
+Run the Deluge torrent server simply and reproducably!
 
 ## Branches/Tags
 - Master/Latest = Deluge Daemon (w/ Console) + Web Server
