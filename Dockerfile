@@ -1,12 +1,20 @@
-FROM alpine:latest
+FROM ubuntu:18.04
 LABEL maintainer="Wolfereign"
 
 # Update Packages and Install Needed Packages
-RUN apk --repository "http://dl-cdn.alpinelinux.org/alpine/edge/testing" \
-        --repository "http://dl-cdn.alpinelinux.org/alpine/edge/main" \
-        --no-cache add deluge py2-pip \
-         && pip2 --no-cache-dir install service_identity twisted \
-         && apk --no-cache del py2-pip \
+RUN apt-get update && \
+  && apt-get install -y tzdata gnupg-utils \
+  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 249AD24C \
+  && echo "deb http://ppa.launchpad.net/deluge-team/ppa/ubuntu bionic main " >> /etc/apt/sources.list.d/deluge.list \
+  && apt-get update \
+  && apt-get install -y \
+        deluged \
+        deluge-console \
+        deluge-web \
+        supervisor \
+  && apt-get --purge remove -y gnupg-utils \
+  && apt-get --purge autoremove -y \
+  && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 
 # Create Needed Mount Points
 VOLUME /config \
