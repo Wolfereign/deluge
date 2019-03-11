@@ -31,5 +31,5 @@ COPY supervisord.conf /etc/supervisord.conf
 # Copy entrypoint.sh into image
 COPY entrypoint.sh /root/entrypoint.sh
 
-# Supervisord will run deluge, deluge-webui, and OpenVPN(PIA)
+# Supervisord will run deluged and deluge-webui
 ENTRYPOINT ["/bin/sh","/root/entrypoint.sh"]
