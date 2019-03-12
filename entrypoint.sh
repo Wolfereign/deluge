@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/dumb-init /bin/sh
 
 # Quit Script on Error
 set -e
@@ -19,7 +19,6 @@ if [ ! -f /deluge/config/core.conf ]; then
 
 # Generate Conf Files
 deluged -c /deluge/config 
-deluge-console -c /deluge/config "config"
 deluge-console -c /deluge/config "config -s allow_remote true"
 deluge-console -c /deluge/config "config -s daemon_port 58846"
 deluge-console -c /deluge/config "config -s torrentfiles_location /deluge/torrents/torrent-files"
@@ -28,14 +27,12 @@ deluge-console -c /deluge/config "config -s move_completed true"
 deluge-console -c /deluge/config "config -s move_completed_path /deluge/torrents/completed"
 deluge-console -c /deluge/config "config -s autoadd_enable true"
 deluge-console -c /deluge/config "config -s autoadd_location /deluge/torrents/autoadd"
-deluge-console -c /config "halt"
+deluge-console -c /deluge/config "halt"
 
 fi
 
 # Ensure deluge owns the needed directories
-chown -R deluge:deluge /config
-chown -R deluge:deluge /torrents
+chown -R deluge:deluge /deluge
 
-# Start Deluge Daemon/WebServer
-su -s /bin/bash -c "/usr/bin/deluged --config=/config --loglevel=info" -g deluge deluge &
-su -s /bin/bash -c "/usr/bin/deluge-web  --config=/config --loglevel=info" -g deluge deluge
+# Start Supervisor To Manage Processes
+supervisord -c /root/supervisord.conf
