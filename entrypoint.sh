@@ -8,34 +8,34 @@ groupmod --gid "$GROUP_ID" deluge || true
 usermod --uid "$USER_ID" deluge || true
 
 # Verify Directory Structure
-mkdir -p /torrents/autoadd
-mkdir -p /torrents/completed
-mkdir -p /torrents/inprogress
-mkdir -p /torrents/torrent-files
+mkdir -p /deluge/config
+mkdir -p /deluge/torrents/autoadd
+mkdir -p /deluge/torrents/completed
+mkdir -p /deluge/torrents/inprogress
+mkdir -p /deluge/torrents/torrent-files
+
+# If default configs are missing then generate and configure them
+if [ ! -f /deluge/config/core.conf ]; then
+
+# Generate Conf Files
+deluged -c /deluge/config 
+deluge-console -c /deluge/config "config"
+deluge-console -c /deluge/config "config -s allow_remote true"
+deluge-console -c /deluge/config "config -s daemon_port 58846"
+deluge-console -c /deluge/config "config -s torrentfiles_location /deluge/torrents/torrent-files"
+deluge-console -c /deluge/config "config -s download_location /deluge/torrents/inprogress"
+deluge-console -c /deluge/config "config -s move_completed true"
+deluge-console -c /deluge/config "config -s move_completed_path /deluge/torrents/completed"
+deluge-console -c /deluge/config "config -s autoadd_enable true"
+deluge-console -c /deluge/config "config -s autoadd_location /deluge/torrents/autoadd"
+deluge-console -c /config "halt"
+
+fi
 
 # Ensure deluge owns the needed directories
 chown -R deluge:deluge /config
 chown -R deluge:deluge /torrents
 
-# If default configs are missing then generate and configure them
-if [ ! -f /config/core.conf ] || [ ! -f /config/web.conf ] ; then
-
-# Generate Conf Files
-deluged -c /config && deluge-console -c /config "config" && deluge-console -c /config "halt"
-
-# Edit Conf Files To Image/Container Environment
-sed -i 's#\("move_completed_path": \)\(.*\)#\1"/torrents/completed",#' /config/core.conf
-sed -i 's#\("daemon_port": \)\(.*\)#\158846#' /config/core.conf
-sed -i 's#\("torrentfiles_location": \)\(.*\)#\1"/torrents/torrent-files",#' /config/core.conf
-sed -i 's#\("allow_remote": \)\(.*\)#\1true,#' /config/core.conf
-sed -i 's#\("download_location": \)\(.*\)#\1"/torrents/inprogress",#' /config/core.conf
-sed -i 's#\("move_completed": \)\(.*\)#\1true,#' /config/core.conf
-sed -i 's#\("autoadd_enable": \)\(.*\)#\1true,#' /config/core.conf
-sed -i 's#\("autoadd_location": \)\(.*\)#\1"/torrents/autoadd",#' /config/core.conf
-
-sed -i 's#\("port": \)\(.*\)#\18112#' /config/web.conf
-
-fi
-
-# Start Supervisord
-supervisord -c /etc/supervisord.conf
+# Start Deluge Daemon/WebServer
+/usr/bin/deluged --config=/config --loglevel=info &
+/usr/bin/deluge-web  --config=/config --loglevel=info

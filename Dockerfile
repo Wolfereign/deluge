@@ -1,43 +1,26 @@
-FROM ubuntu:18.04
+FROM ubuntu:rolling
 LABEL maintainer="Wolfereign"
 
-# Update Packages and Install Needed Packages
-RUN apt-get update && \
-  && apt-get install -y tzdata gnupg-utils \
-  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 249AD24C \
-  && echo "deb http://ppa.launchpad.net/deluge-team/ppa/ubuntu bionic main " >> /etc/apt/sources.list.d/deluge.list \
-  && apt-get update \
-  && apt-get install -y \
-        deluged \
-        deluge-console \
-        deluge-web \
-        supervisor \
-  && apt-get --purge remove -y gnupg-utils \
-  && apt-get --purge autoremove -y \
-  && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
+# Create User & Directories
+RUN mkdir -p /config \
+	&& chown "999":"999" /config \
+	&& addgroup --system --gid "999" deluge \
+	&& adduser --system --uid "999" --gid "999" --home /config deluge
 
-# Create Needed Mount Points
-VOLUME /config \
-       /torrents
-
-# UID/GID
-ENV USER_ID=866 \
-    GROUP_ID=866
-
-# Configure Settings
-RUN addgroup -g "${GROUP_ID}" -S deluge &&\
-    adduser -S -D -u "${USER_ID}" -G deluge -g "Deluge Service" -h /config deluge
-
-# Expose Needed Ports (In Order, by line: Deluge Service, Deluge WebUI, Torrent Incoming Port)
-EXPOSE 8112/tcp \
-        58846/tcp \
-        53160/tcp 53160/udp
-
-# Copy the supervisord configuration file
-COPY supervisord.conf /etc/supervisord.conf
+# Install Needed Packages
+RUN DEBIAN_FRONTEND=nointeractive apt-get update && apt-get install -y \
+		deluged \
+		deluge-console \
+		deluge-web \
+		dumb-init \
+	&& apt-get --purge autoremove -y \
+	&& rm -rf /tmp/* /var/tmp/* /var/lib/apt/* 
 
 # Copy entrypoint.sh into image
 COPY entrypoint.sh /root/entrypoint.sh
 
+# Expose Needed Ports (In Order, by line: Deluge WebUI, Deluge Daemon, Torrent Incoming Port)
+EXPOSE 8112/tcp 58846/tcp 53160/tcp 53160/udp
+
 # Supervisord will run deluged and deluge-webui
-ENTRYPOINT ["/bin/sh","/root/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/dumb-init", "/bin/sh", "/root/entrypoint.sh"]
