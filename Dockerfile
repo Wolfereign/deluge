@@ -14,8 +14,11 @@ RUN DEBIAN_FRONTEND=nointeractive apt-get update && apt-get install -y \
 	&& apt-get --purge autoremove -y \
 	&& rm -rf /tmp/* /var/tmp/* /var/lib/apt/* 
 
+# Copy entrypoint.sh into image
+COPY entrypoint.sh /root/entrypoint.sh
+
 # Expose Needed Ports (In Order, by line: Deluge WebUI, Deluge Daemon, Torrent Incoming Port)
 EXPOSE 8112/tcp 
 
 # Supervisord will run deluged and deluge-webui
-ENTRYPOINT ["/usr/bin/dumb-init", "/usr/bin/deluge-web", "--config=/config", "--loglevel=info"]
+ENTRYPOINT ["/usr/bin/dumb-init", "/bin/sh", "/root/entrypoint.sh"]
