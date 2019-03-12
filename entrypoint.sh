@@ -37,5 +37,5 @@ chown -R deluge:deluge /config
 chown -R deluge:deluge /torrents
 
 # Start Deluge Daemon/WebServer
-/usr/bin/deluged --config=/config --loglevel=info &
-/usr/bin/deluge-web  --config=/config --loglevel=info
+su -s /bin/bash -c "/usr/bin/deluged --config=/config --loglevel=info" -g deluge deluge &
+su -s /bin/bash -c "/usr/bin/deluge-web  --config=/config --loglevel=info" -g deluge deluge
