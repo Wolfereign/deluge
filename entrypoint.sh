@@ -13,5 +13,5 @@ mkdir -p /deluge/config
 # Ensure deluge owns the needed directories
 chown -R deluge:deluge /deluge
 
-# Start Deluge Daemon/WebServer
+# Start Deluge Web Server
 su -s /bin/bash -c "/usr/bin/deluge-web  --config=/deluge/config --loglevel=info" deluge
