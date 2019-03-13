@@ -30,8 +30,9 @@ Docker Container Run -d \
   -p 8112:8112 \
   -p 58846:58846 \
   -p 56638:56638 \
-  -e dname="customUserName"
-  -e dpass="customPass"
+  -p 56638:56638/udp \
+  -e dname="customUserName" \
+  -e dpass="customPass" \
   wolfereign/deluge-simple:latest
 ```
 
@@ -43,8 +44,9 @@ Docker Container Run -d \
   --mount type=volume,source=deluge,target=/deluge \
   -p 58846:58846 \
   -p 56638:56638 \
-  -e dname="customUserName"
-  -e dpass="customPass"
+  -p 56638:56638/udp \
+  -e dname="customUserName" \
+  -e dpass="customPass" \
   wolfereign/deluge-simple:daemon
 ```
 
