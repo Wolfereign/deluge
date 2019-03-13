@@ -21,6 +21,9 @@ if [ ! -f /deluge/config/core.conf ]; then
 deluged -c /deluge/config 
 deluge-console -c /deluge/config "config -s allow_remote true"
 deluge-console -c /deluge/config "config -s daemon_port 58846"
+deluge-console -c /deluge/config "config -s random_port false" 
+deluge-console -c /deluge/config "config -s listen_ports (53160, 53160)"
+deluge-console -c /deluge/config "config -s random_outgoing_ports true" 
 deluge-console -c /deluge/config "config -s torrentfiles_location /deluge/torrents/torrent-files"
 deluge-console -c /deluge/config "config -s download_location /deluge/torrents/inprogress"
 deluge-console -c /deluge/config "config -s move_completed true"
@@ -28,6 +31,9 @@ deluge-console -c /deluge/config "config -s move_completed_path /deluge/torrents
 deluge-console -c /deluge/config "config -s autoadd_enable true"
 deluge-console -c /deluge/config "config -s autoadd_location /deluge/torrents/autoadd"
 deluge-console -c /deluge/config "halt"
+
+# Add User To Auth File
+echo "deluge-simple:deluge-simple:10" >> /deluge/config/auth
 
 fi
 
