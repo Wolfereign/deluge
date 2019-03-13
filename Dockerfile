@@ -11,20 +11,15 @@ RUN mkdir -p /deluge/config /deluge/torrents \
 RUN DEBIAN_FRONTEND=nointeractive apt-get update && apt-get install -y \
 		deluged \
 		deluge-console \
-		deluge-web \
 		dumb-init \
-		supervisor \
 	&& apt-get --purge autoremove -y \
 	&& rm -rf /tmp/* /var/tmp/* /var/lib/apt/* 
 
 # Copy entrypoint.sh into image
 COPY entrypoint.sh /root/entrypoint.sh
 
-# Copy Supervisor Config into image
-COPY supervisord.conf /root/supervisord.conf
-
-# Expose Needed Ports (In Order: Deluge WebUI, Deluge Daemon, Torrent Incoming/Outgoing Port)
-EXPOSE 8112/tcp 58846/tcp 56638/tcp 56638/udp
+# Expose Needed Ports (In Order: Deluge Daemon, Torrent Incoming/Outgoing Ports)
+EXPOSE 58846/tcp 56638/tcp 56638/udp
 
 # Supervisord will run deluged and deluge-webui
 ENTRYPOINT ["/usr/bin/dumb-init", "/bin/sh", "/root/entrypoint.sh"]
