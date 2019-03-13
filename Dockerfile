@@ -21,5 +21,5 @@ COPY entrypoint.sh /root/entrypoint.sh
 # Expose Needed Ports (In Order: Deluge Daemon, Torrent Incoming/Outgoing Ports)
 EXPOSE 58846/tcp 56638/tcp 56638/udp
 
-# Supervisord will run deluged and deluge-webui
+# Use dumb-init to reap zombies and such
 ENTRYPOINT ["/usr/bin/dumb-init", "/bin/sh", "/root/entrypoint.sh"]
