@@ -19,11 +19,14 @@ if [ ! -f /deluge/config/core.conf ]; then
 
 # Generate Conf Files
 deluged -c /deluge/config 
-deluge-console -c /deluge/config "config -s allow_remote true"
 deluge-console -c /deluge/config "config -s daemon_port 58846"
+deluge-console -c /deluge/config "config -s allow_remote true"
 deluge-console -c /deluge/config "config -s random_port false" 
-deluge-console -c /deluge/config "config -s listen_ports (53160, 53160)"
-deluge-console -c /deluge/config "config -s random_outgoing_ports true" 
+deluge-console -c /deluge/config "config -s listen_ports (56638, 56638)"
+deluge-console -c /deluge/config "config -s random_outgoing_ports false" 
+deluge-console -c /deluge/config "config -s outgoing_ports (56638, 56638)"
+deluge-console -c /deluge/config "config -s copy_torrent_file true"
+deluge-console -c /deluge/config "config -s del_copy_torrent_file true"
 deluge-console -c /deluge/config "config -s torrentfiles_location /deluge/torrents/torrent-files"
 deluge-console -c /deluge/config "config -s download_location /deluge/torrents/inprogress"
 deluge-console -c /deluge/config "config -s move_completed true"

@@ -23,8 +23,8 @@ COPY entrypoint.sh /root/entrypoint.sh
 # Copy Supervisor Config into image
 COPY supervisord.conf /root/supervisord.conf
 
-# Expose Needed Ports (In Order, by line: Deluge WebUI, Deluge Daemon, Torrent Incoming Port)
-EXPOSE 8112/tcp 58846/tcp 53160/tcp 53160/udp
+# Expose Needed Ports (In Order: Deluge WebUI, Deluge Daemon, Torrent Incoming/Outgoing Port)
+EXPOSE 8112/tcp 58846/tcp 56638/tcp 56638/udp
 
 # Supervisord will run deluged and deluge-webui
 ENTRYPOINT ["/usr/bin/dumb-init", "/bin/sh", "/root/entrypoint.sh"]
